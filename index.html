@@ -4,74 +4,164 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Unblocked Games V4</title>
+<style>
+* { box-sizing: border-box; }
 
-   
-
-    <style>
-/* Gör att allt använder border-box och inte går utanför skärmen */
-* {
-    box-sizing: border-box;
+:root {
+    --accent:#1e4fa3;
+    --accent-dark:#0e2a52;
 }
 
-/* Säkerställ att body tar hela skärmen och text/fonter skalar */
-body {
-    width: 100%;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
+html, body {
+    width:100%;
+    height:100%;
+    margin:0;
+    font-family:Arial,sans-serif;
+    background: linear-gradient(180deg,#0a2a6c,#000);
+    color:white;
 }
 
-/* Huvudflex-behållare (app, sidebar och main) */
-.app {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
+body.blue  { --accent:#1e4fa3; --accent-dark:#0e2a52; }
+body.red   { --accent:#a30000; --accent-dark:#520000; }
+body.green { --accent:#00a300; --accent-dark:#004d00; }
 
-/* Sidebar anpassar sig */
+.app { display:flex; width:100%; height:100%; }
+
 .sidebar {
-    flex: 0 0 auto; /* behåll bredd men kan krympa */
-    max-width: 100%;
+    width:90px;
+    background:rgba(0,0,0,0.65);
+    backdrop-filter:blur(10px);
+    padding:10px 5px;
+    overflow-y:auto;
 }
 
-/* Main innehåll fyller resten */
-.main {
-    flex: 1 1 auto;
-    width: 100%;
+.sidebar-btn {
+    width:100%;
+    margin-bottom:6px;
+    padding:10px 0;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(135deg,var(--accent-dark),var(--accent));
+    color:white;
+    font-size:20px;
+    cursor:pointer;
 }
 
-/* Spel-grid anpassar antal kolumner efter skärmstorlek */
+.main { flex:1; padding:25px; overflow-y:auto; }
+
+.header { text-align:center; margin-bottom:20px; }
+
+.header h1 {
+    font-size:52px;
+    margin:0;
+    background:linear-gradient(90deg,#4da3ff,#fff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.search-box input {
+    margin-top:20px;
+    padding:14px;
+    width:100%;
+    max-width:420px;
+    border-radius:12px;
+    border:none;
+    font-size:16px;
+}
+
+#embedContainer {
+    display:none;
+    margin:20px auto 40px auto;
+    max-width:1100px;
+    width:100%;
+    height:600px;
+    background:#000;
+    border-radius:18px;
+    overflow:hidden;
+    position:relative;
+}
+
+#embedContainer iframe { width:100%; height:100%; border:none; }
+
+.fullscreen-btn {
+    position:absolute;
+    bottom:10px;
+    right:10px;
+    padding:10px 20px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--accent-dark),var(--accent));
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.section h2 {
+    border-bottom:2px solid rgba(255,255,255,0.25);
+    padding-bottom:6px;
+    margin-top:40px;
+}
+
 .games-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
 }
 
-/* Spelknappar fyller sina rutors storlek */
+.game-card { position:relative; }
+
 .game-btn {
+    width:100%;
+    padding:22px;
+    border-radius:16px;
+    border:none;
+    background:linear-gradient(135deg,var(--accent-dark),var(--accent));
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.favorite {
+    position:absolute;
+    top:10px;
+    right:12px;
+    font-size:20px;
+    cursor:pointer;
+    opacity:0.5;
+}
+
+.favorite.active { opacity:1; color:gold; }
+
+@media(max-width:900px){ .games-grid{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:500px){ .games-grid{grid-template-columns:1fr;} }
+</style>
+
+<style>
+  /* Anpassa iframe-container så att den blir responsiv */
+  #embedContainer {
+    display: none;
+    margin: 20px auto 40px auto;
+    width: 100%;
+    max-width: 100%; /* Tar hela bredden */
+    aspect-ratio: 16/9; /* Håller proportionerna för spelet */
+    background: #000;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #embedContainer iframe {
     width: 100%;
     height: 100%;
-    font-size: clamp(12px, 2vw, 20px); /* text skalar */
-}
+    border: none;
+  }
 
-/* Iframe som fyller sin container */
-#embedContainer iframe {
-    width: 100%;
-    height: 70vh; /* kan ändras vid behov */
-}
-
-/* Responsivt: små skärmar */
-@media (max-width: 900px) {
-    .app { flex-direction: column; }
-    .sidebar { width: 100%; display: flex; flex-wrap: wrap; justify-content: center; }
-    .sidebar-btn { flex: 1 1 auto; margin: 5px; }
-    #embedContainer iframe { height: 50vh; }
-}
-
-@media (max-width: 500px) {
-    .games-grid { grid-template-columns: 1fr; }
-    #embedContainer iframe { height: 40vh; }
-}
+  /* Spel-grid responsivt */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+  }
 </style>
 
 
@@ -223,6 +313,23 @@ function toggleFullscreen(){
 
 // ===== START =====
 renderGames(files);
+   
+   function openIframe(url, title) {
+    const embedContainer = document.getElementById('embedContainer');
+    const gameFrame = document.getElementById('gameFrame');
+    embedContainer.style.display = 'block';
+    gameFrame.src = url;
+
+    // Anpassa höjd dynamiskt
+    function resizeIframe() {
+        const width = embedContainer.offsetWidth;
+        embedContainer.style.height = width * 9 / 16 + 'px'; // behåller 16:9
+    }
+
+    window.addEventListener('resize', resizeIframe);
+    resizeIframe();
+}
+
 </script>
 
 
