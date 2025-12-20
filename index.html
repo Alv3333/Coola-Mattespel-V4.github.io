@@ -225,12 +225,17 @@ function renderGames(list){
     });
 }
 
-// ===== OPEN =====
-function openGame(file){
-   gameFrame.src = `UGS-Files/${game}.html`;
-    embedContainer.style.display = "block";
-    addRecent(file);
+function openGame(game) {
+    const embedContainer = document.getElementById('embedContainer');
+    const gameFrame = document.getElementById('gameFrame');
+
+    // Ladda spel
+    gameFrame.src = `UGS-Files/${game}.html`;
+
+    // Visa iframe
+    embedContainer.style.display = 'block';
 }
+
 
 // ===== RECENT =====
 function addRecent(file){
