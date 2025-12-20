@@ -168,6 +168,74 @@ body.green { --accent:#00a300; --accent-dark:#004d00; }
 @media(max-width:500px){ .games-grid{grid-template-columns:1fr;} }
 </style>
 
+    <style>
+/* Gör att allt använder border-box och inte går utanför skärmen */
+* {
+    box-sizing: border-box;
+}
+
+/* Säkerställ att body tar hela skärmen och text/fonter skalar */
+body {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Huvudflex-behållare (app, sidebar och main) */
+.app {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/* Sidebar anpassar sig */
+.sidebar {
+    flex: 0 0 auto; /* behåll bredd men kan krympa */
+    max-width: 100%;
+}
+
+/* Main innehåll fyller resten */
+.main {
+    flex: 1 1 auto;
+    width: 100%;
+}
+
+/* Spel-grid anpassar antal kolumner efter skärmstorlek */
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+/* Spelknappar fyller sina rutors storlek */
+.game-btn {
+    width: 100%;
+    height: 100%;
+    font-size: clamp(12px, 2vw, 20px); /* text skalar */
+}
+
+/* Iframe som fyller sin container */
+#embedContainer iframe {
+    width: 100%;
+    height: 70vh; /* kan ändras vid behov */
+}
+
+/* Responsivt: små skärmar */
+@media (max-width: 900px) {
+    .app { flex-direction: column; }
+    .sidebar { width: 100%; display: flex; flex-wrap: wrap; justify-content: center; }
+    .sidebar-btn { flex: 1 1 auto; margin: 5px; }
+    #embedContainer iframe { height: 50vh; }
+}
+
+@media (max-width: 500px) {
+    .games-grid { grid-template-columns: 1fr; }
+    #embedContainer iframe { height: 40vh; }
+}
+</style>
+
+
 </head>
 
 <body class="blue">
