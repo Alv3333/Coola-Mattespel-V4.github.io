@@ -17,7 +17,7 @@ html,body{
     transition:background .6s ease;
 }
 
-/* ===== ANIMATED BACKGROUND (NYTT) ===== */
+
 body{
     background-size:400% 400%;
     animation:bgMove 25s ease infinite;
@@ -29,7 +29,7 @@ body{
     100%{background-position:0% 50%;}
 }
 
-/* ===== THEMES ===== */
+
 body.blue{
     --accent:#1e4fa3;--accent-dark:#0e2a52;
     background-image:linear-gradient(180deg,#0a2a6c,#000,#0a2a6c);
@@ -63,7 +63,7 @@ body.pink{
     background-image:linear-gradient(180deg,#4a0028,#000,#4a0028);
 }
 
-/* ===== LAYOUT ===== */
+
 .app{display:flex;width:100%;height:100%;}
 .sidebar{
     width:90px;
@@ -84,7 +84,7 @@ body.pink{
 }
 .main{flex:1;padding:25px;overflow-y:auto;}
 
-/* ===== HEADER ===== */
+
 .header{text-align:center;margin-bottom:20px;}
 .header h1{
     font-size:52px;
@@ -103,7 +103,7 @@ body.pink{
     font-size:16px;
 }
 
-/* ===== EMBED ===== */
+
 #embedContainer{
     display:none;
     margin:20px auto;
@@ -127,7 +127,7 @@ body.pink{
     cursor:pointer;
 }
 
-/* ===== GAMES ===== */
+
 .games-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
@@ -154,7 +154,7 @@ body.pink{
 }
 .favorite.active{opacity:1;color:gold;}
 
-/* ===== THEME POPUP ===== */
+
 #themePopup{
     position:fixed;
     inset:0;
@@ -179,7 +179,7 @@ body.pink{
     font-size:22px;
     background:linear-gradient(135deg,var(--accent-dark),var(--accent));
 }
-    /* ===== AURORA BACKGROUND (NYTT – LÄGGER TILL, TAR INGET BORT) ===== */
+ 
 body::before,
 body::after{
     content:"";
@@ -192,7 +192,7 @@ body::after{
     pointer-events:none;
 }
 
-/* Första aurora-lagret */
+
 body::before{
     background:
         radial-gradient(circle at 30% 30%, var(--accent), transparent 60%),
@@ -200,7 +200,7 @@ body::before{
         radial-gradient(circle at 50% 70%, var(--accent), transparent 60%);
 }
 
-/* Andra lagret – långsammare & offset */
+
 body::after{
     background:
         radial-gradient(circle at 60% 30%, var(--accent-dark), transparent 60%),
@@ -334,7 +334,7 @@ function toggleFullscreen(){
 !document.fullscreenElement?embedContainer.requestFullscreen():document.exitFullscreen();
 }
 
-/* ===== THEME SYSTEM ===== */
+
 function setTheme(t){
 document.body.className=t;
 localStorage.setItem("theme",t);
