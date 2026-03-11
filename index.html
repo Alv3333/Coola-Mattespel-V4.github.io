@@ -712,7 +712,11 @@
       <input id="profilePassword" class="chat-input" type="password" placeholder="Lösenord" />
       <div class="chat-row">
         <button class="chat-send" onclick="registerUser()">Registrera</button>
-        <button class="chat-send" onclick="loginUser()">Logga in</button>
+        <button class="chat-send" onclick="requestLoginCode()">Skicka kod</button>
+      </div>
+      <input id="profileOtp" class="chat-input" maxlength="6" placeholder="6-siffrig kod" />
+      <div class="chat-row">
+        <button class="chat-send" onclick="loginUser()">Logga in med kod</button>
       </div>
       <p id="profileInfo"></p>
       <hr>
@@ -817,6 +821,12 @@
       databaseURL: "https://chatt-4d3c7-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "chatt-4d3c7",
       appId: "1:348935217920:web:05883b914adf5bf10849e5"
+    };
+
+    const requiredMailDomain = "@edu.lomma.se";
+    const emailProviderConfig = {
+      endpoint: "", // ex: https://din-mail-funktion/send-login-code
+      bearerToken: ""
     };
 
     let chatRef = null;
@@ -1163,7 +1173,7 @@ async function registerUser() {
 
   const uErr = validateUsername(username);
   if (uErr) return (info.textContent = uErr);
-  if (!email.includes("@")) return (info.textContent = "Skriv en giltig mail.");
+  if (!email.endsWith(requiredMailDomain)) return (info.textContent = `Mail måste sluta med ${requiredMailDomain}`);
   if (password.length < 4) return (info.textContent = "Lösenord minst 4 tecken.");
 
   const exists = await db.ref(`users/${username}`).get();
@@ -1184,7 +1194,62 @@ async function registerUser() {
     inventory: {},
     createdAt: Date.now()
   });
-  info.textContent = "Konto skapat! Logga in nu.";
+  info.textContent = "Konto skapat! Klicka på 'Skicka kod' för inloggning.";
+}
+
+async function sendLoginCodeEmail(email, code) {
+  if (!emailProviderConfig.endpoint) return false;
+  try {
+    const res = await fetch(emailProviderConfig.endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(emailProviderConfig.bearerToken ? { Authorization: `Bearer ${emailProviderConfig.bearerToken}` } : {})
+      },
+      body: JSON.stringify({
+        to: email,
+        subject: "Din inloggningskod",
+        text: `Din kod är: ${code}`
+      })
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function requestLoginCode() {
+  if (!db) return;
+  const email = sanitizeText(document.getElementById("profileEmail").value).toLowerCase();
+  const username = getSafeUsername(document.getElementById("profileUsername").value);
+  const password = sanitizeText(document.getElementById("profilePassword").value);
+  const info = document.getElementById("profileInfo");
+
+  if (!email.endsWith(requiredMailDomain)) return (info.textContent = `Du måste använda ${requiredMailDomain}`);
+
+  const snap = await db.ref(`users/${username}`).get();
+  if (!snap.exists()) return (info.textContent = "Användaren finns inte.");
+  const data = snap.val();
+  if ((data.email || "").toLowerCase() !== email) return (info.textContent = "Fel mail för detta konto.");
+  if (data.password !== password) return (info.textContent = "Fel lösenord.");
+
+  const code = String(Math.floor(100000 + Math.random() * 900000));
+  const expiresAt = Date.now() + 10 * 60 * 1000;
+
+  await db.ref(`login-codes/${username}`).set({
+    code,
+    expiresAt,
+    createdAt: Date.now(),
+    email
+  });
+
+  const sent = await sendLoginCodeEmail(email, code);
+  if (sent) {
+    info.textContent = `Kod skickad till ${email}.`;
+  } else {
+    info.textContent = `Kod skapad men mail-provider saknas. Lägg till endpoint i emailProviderConfig.`;
+    alert(`Utvecklingsläge: din kod är ${code}`);
+  }
 }
 
 async function loginUser() {
@@ -1192,9 +1257,11 @@ async function loginUser() {
   const email = sanitizeText(document.getElementById("profileEmail").value).toLowerCase();
   const username = getSafeUsername(document.getElementById("profileUsername").value);
   const password = sanitizeText(document.getElementById("profilePassword").value);
+  const otp = sanitizeText(document.getElementById("profileOtp").value);
   const info = document.getElementById("profileInfo");
 
-  if (!email.includes("@")) return (info.textContent = "Skriv mail för att logga in.");
+  if (!email.endsWith(requiredMailDomain)) return (info.textContent = `Skriv ett giltigt ${requiredMailDomain}-mail.`);
+  if (!/^\d{6}$/.test(otp)) return (info.textContent = "Skriv 6-siffrig kod.");
 
   const snap = await db.ref(`users/${username}`).get();
   if (!snap.exists()) return (info.textContent = "Användaren finns inte.");
@@ -1202,6 +1269,14 @@ async function loginUser() {
   if ((data.email || "").toLowerCase() !== email) return (info.textContent = "Fel mail för detta konto.");
   if (data.password !== password) return (info.textContent = "Fel lösenord.");
   if (data.bannedUntil && Date.now() < data.bannedUntil) return (info.textContent = "Du är bannad just nu.");
+
+  const codeSnap = await db.ref(`login-codes/${username}`).get();
+  const codeData = codeSnap.val();
+  if (!codeData) return (info.textContent = "Ingen kod hittades. Klicka på 'Skicka kod'.");
+  if (Date.now() > (codeData.expiresAt || 0)) return (info.textContent = "Koden har gått ut. Skicka ny kod.");
+  if (String(codeData.code) !== otp) return (info.textContent = "Fel kod.");
+
+  await db.ref(`login-codes/${username}`).remove();
 
   currentUser = { username };
   currentUserData = data;
@@ -1212,6 +1287,7 @@ async function loginUser() {
   renderFriendList();
   populateFriendSelect();
 }
+
 
 function bindUserRef() {
   if (!db || !currentUser) return;
