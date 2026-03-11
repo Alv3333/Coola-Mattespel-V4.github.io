@@ -1033,9 +1033,10 @@ function setChatEnabledState() {
   const loggedIn = !!(currentUser && currentUser.username);
   chatInputEl.disabled = !loggedIn;
   chatSendEl.disabled = !loggedIn;
+  privateChatBtn.disabled = !loggedIn;
   chatStatusEl.textContent = loggedIn
     ? `Inloggad som ${getChatDisplayName()} • Cooldown 3s`
-    : "Logga in för att chatta.";
+    : "Logga in för att chatta. Du kan fortfarande läsa global chat.";
 }
 
 function getPrivateChatPath(a, b) {
@@ -1050,15 +1051,19 @@ function switchChatMode(mode) {
   chatMessagesEl.innerHTML = "";
 
   if (chatRef) chatRef.off();
-  if (!db || !currentUser) return;
-
   if (privateChatUnsub) {
     privateChatUnsub.off();
     privateChatUnsub = null;
   }
+  if (!db) return;
 
   if (mode === "global") {
     chatRef.limitToLast(120).on("child_added", (snap) => addChatMessage(snap.val() || {}));
+    return;
+  }
+
+  if (!currentUser) {
+    addSystemChatMessage("Logga in för privat chatt.");
     return;
   }
 
@@ -1269,12 +1274,11 @@ function claimSnowQuest() {
   if (!currentUser) return alert("Logga in först.");
   const status = document.getElementById("questStatus");
   if (!snowRideStartedAt) {
-    snowRideStartedAt = Date.now();
-    status.textContent = "Quest startad! Spela nu och kom tillbaka efter 15 min.";
+    status.textContent = "Starta Snow Rider 3D först för att börja questen.";
     return;
   }
   if (Date.now() - snowRideStartedAt < 15 * 60 * 1000) {
-    status.textContent = "Inte klart än. Fortsätt spela!";
+    status.textContent = "Inte klart än. Fortsätt spela Snow Rider 3D!";
     return;
   }
   snowRideStartedAt = null;
@@ -1414,6 +1418,10 @@ async function adminAction(action) {
       requestAnimationFrame(() => {
         embedContainer.scrollIntoView({ behavior: "smooth", block: "start" });
       });
+
+      if (game === "clsummerRider3D") {
+        if (!snowRideStartedAt) snowRideStartedAt = Date.now();
+      }
 
       if (!recentGames.includes(game)) {
         recentGames.unshift(game);
