@@ -1169,6 +1169,11 @@ async function registerUser() {
   const exists = await db.ref(`users/${username}`).get();
   if (exists.exists()) return (info.textContent = "Username är redan taget.");
 
+  const allUsersSnap = await db.ref("users").get();
+  const allUsers = allUsersSnap.val() || {};
+  const duplicateEmail = Object.values(allUsers).some((u) => (u?.email || "").toLowerCase() === email);
+  if (duplicateEmail) return (info.textContent = "Mail används redan av ett annat konto.");
+
   await db.ref(`users/${username}`).set({
     email,
     password,
@@ -1184,13 +1189,17 @@ async function registerUser() {
 
 async function loginUser() {
   if (!db) return;
+  const email = sanitizeText(document.getElementById("profileEmail").value).toLowerCase();
   const username = getSafeUsername(document.getElementById("profileUsername").value);
   const password = sanitizeText(document.getElementById("profilePassword").value);
   const info = document.getElementById("profileInfo");
 
+  if (!email.includes("@")) return (info.textContent = "Skriv mail för att logga in.");
+
   const snap = await db.ref(`users/${username}`).get();
   if (!snap.exists()) return (info.textContent = "Användaren finns inte.");
   const data = snap.val();
+  if ((data.email || "").toLowerCase() !== email) return (info.textContent = "Fel mail för detta konto.");
   if (data.password !== password) return (info.textContent = "Fel lösenord.");
   if (data.bannedUntil && Date.now() < data.bannedUntil) return (info.textContent = "Du är bannad just nu.");
 
