@@ -586,9 +586,184 @@
         height: 46dvh;
       }
     }
+
+    .top-profile-btn {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 16px;
+      padding: 14px 20px;
+      font-weight: 800;
+      font-size: 19px;
+      letter-spacing: .4px;
+      color: #fff;
+      background: linear-gradient(135deg, #1d2f60, var(--accent), #74beff);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255,255,255,.2);
+      cursor: pointer;
+      z-index: 1250;
+      transition: transform .15s ease, filter .2s ease;
+    }
+
+    .top-profile-btn:hover { transform: translateY(-2px) scale(1.02); filter: brightness(1.06); }
+
+    .panel-page {
+      display: none;
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, .6);
+      border: 1px solid rgba(255, 255, 255, .15);
+    }
+
+    .quest-item, .shop-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    .mini-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+      font-weight: 700;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.65);
+      z-index: 1400;
+    }
+
+    .modal.show { display: flex; }
+
+    .modal-card {
+      width: min(760px, 94vw);
+      max-height: 90dvh;
+      overflow-y: auto;
+      border-radius: 14px;
+      background: rgba(10,10,10,.94);
+      border: 1px solid rgba(255,255,255,.2);
+      padding: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .form-grid input, .form-grid select {
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      margin-right: 6px;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+
+    .chat-panel.enhanced .chat-msg {
+      animation: popIn .25s ease;
+      background: linear-gradient(150deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+    }
+
+    .chat-status {
+      font-size: 12px;
+      opacity: .85;
+      margin: 0 0 8px;
+    }
+
+    @keyframes popIn {
+      from { transform: translateY(6px); opacity: .3; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+
+    .profile-modal-card {
+      width: min(980px, 96vw);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.24);
+      background: radial-gradient(circle at top right, rgba(90,130,255,.24), transparent 30%), rgba(9,11,22,.95);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+
+    .profile-hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.16);
+    }
+
+    .profile-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .profile-section {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .profile-section h3 { margin: 0 0 10px; }
+
+    .private-chat-box {
+      max-height: 210px;
+      overflow: auto;
+      background: rgba(255,255,255,.05);
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .shop-coins {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      background: rgba(255, 215, 0, .18);
+      border: 1px solid rgba(255,215,0,.35);
+    }
+
+    @media (max-width: 900px) {
+      .profile-columns { grid-template-columns: 1fr; }
+    }
+
   </style>
 <body class="blue">
   <div class="app">
+    <button class="top-profile-btn" id="profileBtn">👤 Profil</button>
+
     <button id="menuToggle" class="menu-toggle" onclick="toggleSidebar()" aria-label="Öppna meny" aria-expanded="false">☰</button>
     <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
 
@@ -602,6 +777,9 @@
       <button class="sidebar-btn" onclick="openIframe('https://docs.google.com/forms/d/e/1FAIpQLScUxR7Ychb0ivMguYI-3BHwb8D3ZH2x7n1vkpXuYjNeVlU3Cg/viewform?usp=header')"><span class="icon">📩</span><span class="label">Förslag</span></button>
      <button class="sidebar-btn" onclick="showUpdates()"><span class="icon">⬆</span><span class="label">Uppdateringar</span></button>
       <button class="sidebar-btn" onclick="openThemePopup()"><span class="icon">🎨</span><span class="label">Tema</span></button>
+      <button class="sidebar-btn" onclick="showQuestPage()"><span class="icon">🎯</span><span class="label">Quest</span></button>
+      <button class="sidebar-btn" onclick="showShopPage()"><span class="icon">🛒</span><span class="label">Shop</span></button>
+      <button class="sidebar-btn" onclick="openAdminPanel()"><span class="icon">🛡️</span><span class="label">Admin</span></button>
     </div>
 
     <div class="chat-panel" id="chatPanel">
@@ -657,6 +835,110 @@
   ">
   </div>
 </div>
+      
+<div id="questPage" class="panel-page">
+  <h2>🎯 Quests</h2>
+  <p>Logga in för att göra quests och få coins.</p>
+  <div class="quest-item">
+    <div><strong>Snow Rider 3D</strong><br><small>Spela i 15 minuter för 10 coins.</small></div>
+    <button class="mini-btn" id="claimQuestBtn" onclick="claimSnowQuest()">Hämta reward</button>
+  </div>
+  <p id="questProgressText">Progress: 0 / 15 min</p>
+</div>
+
+<div id="shopPage" class="panel-page">
+  <h2>🛒 Shop</h2>
+  <div id="shopCoins" class="shop-coins">Coins: 0</div>
+  <div class="shop-item">
+    <div><strong>⭐ Guld-badge</strong><br><small>Kostar 25 coins.</small></div>
+    <button class="mini-btn" onclick="buyItem('goldBadge',25)">Köp</button>
+  </div>
+  <div class="shop-item">
+    <div><strong>✨ Neon-namn</strong><br><small>Kostar 40 coins.</small></div>
+    <button class="mini-btn" onclick="buyItem('neonName',40)">Köp</button>
+  </div>
+  <p id="shopStatusText"></p>
+</div>
+
+<div id="profileModal" class="modal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-card profile-modal-card">
+    <div class="profile-hero">
+      <h2 style="margin:0;">👤 Profil & Kompisar</h2>
+      <p id="profileStateText" style="margin:0;font-weight:700;">Inte inloggad.</p>
+    </div>
+
+    <div class="profile-columns">
+      <div class="profile-section">
+        <h3>📝 Skapa konto</h3>
+        <div class="form-grid">
+          <input id="regEmail" placeholder="Mail" />
+          <input id="regUsername" placeholder="Username" />
+          <input id="regPassword" type="password" placeholder="Lösenord" />
+          <button class="mini-btn" onclick="registerAccount()">Skapa konto</button>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h3>🔐 Logga in</h3>
+        <div class="form-grid">
+          <input id="loginEmail" placeholder="Mail" />
+          <input id="loginPassword" type="password" placeholder="Lösenord" />
+          <button class="mini-btn" onclick="startLogin()">Logga in</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-columns" style="margin-top:12px;">
+      <div class="profile-section">
+        <h3>➕ Lägg till kompis</h3>
+        <div class="form-grid">
+          <input id="friendUsername" placeholder="Username" />
+          <button class="mini-btn" onclick="sendFriendRequest()">Skicka förfrågan</button>
+        </div>
+        <h3>📨 Förfrågningar</h3>
+        <div id="friendRequests"></div>
+        <h3>👥 Kompisar</h3>
+        <div id="friendsList"></div>
+      </div>
+
+      <div class="profile-section">
+        <h3>🔒 Privat chatt</h3>
+        <div class="form-grid">
+          <select id="privateChatFriend"></select>
+          <input id="privateMessageInput" placeholder="Meddelande..." maxlength="200" />
+          <button class="mini-btn" onclick="sendPrivateMessage()">Skicka privat</button>
+        </div>
+        <div id="privateChatMessages" class="private-chat-box"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="adminModal" class="modal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal-card">
+    <h2>🛡️ Admin panel</h2>
+    <div class="form-grid">
+      <input id="adminPassword" type="password" placeholder="Admin lösenord" />
+      <button class="mini-btn" onclick="adminLogin()">Logga in admin</button>
+    </div>
+    <div id="adminControls" style="display:none;">
+      <div class="form-grid">
+        <input id="adminTargetUser" placeholder="Target username" />
+        <input id="adminTimeoutMinutes" type="number" min="1" placeholder="Timeout (min)" />
+        <input id="adminCoins" type="number" min="1" placeholder="Ge coins" />
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="mini-btn" onclick="adminAction('kick')">Kick</button>
+        <button class="mini-btn" onclick="adminAction('ban')">Ban</button>
+        <button class="mini-btn" onclick="adminAction('timeout')">Timeout</button>
+        <button class="mini-btn" onclick="adminAction('coins')">Ge coins</button>
+        <button class="mini-btn" onclick="adminAction('verify')">Verifiera ✔️</button>
+      </div>
+      <p id="adminStatus"></p>
+    </div>
+  </div>
+</div>
+
       <div class="games-grid" id="gamesGrid"></div>
     </div>
   </div>
@@ -937,6 +1219,10 @@ function containsBannedWord(text) {
     }
 
 function sendChatMessage() {
+  if (window.EnhancedApp?.sendChatMessage) {
+    window.EnhancedApp.sendChatMessage();
+    return;
+  }
   const text = sanitizeText(chatInputEl.value);
   if (!text || !chatRef) return;
 
@@ -1035,6 +1321,9 @@ function sendChatMessage() {
     }
 
     function openGame(game) {
+      if (window.EnhancedApp?.onOpenGame) {
+        window.EnhancedApp.onOpenGame(game);
+      }
       startFakeLoader();
 
       embedContainer.style.display = "block";
@@ -1168,9 +1457,400 @@ function sendChatMessage() {
 
     })();
   </script>
+
+<script>
+(function(){
+  const ADMIN_PASSWORD = "SigmaAdmin1234!";
+    const CHAT_COOLDOWN_MS = 3000;
+  const PROFILE_BANNED_WORDS = ["admin","moderator",...bannedWords];
+  let db = null;
+  let currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+  let currentSessionToken = localStorage.getItem("sessionToken") || null;
+  let isAdmin = false;
+  let chatCooldownUntil = 0;
+  let snowQuestMs = Number(localStorage.getItem("snowQuestMs") || 0);
+  let snowQuestClaimed = localStorage.getItem("snowQuestClaimed") === "1";
+  let snowQuestTimer = null;
+  let privateChatUnsub = null;
+
+  const profileBtn = document.getElementById("profileBtn");
+  const profileModal = document.getElementById("profileModal");
+  const adminModal = document.getElementById("adminModal");
+  const profileStateText = document.getElementById("profileStateText");
+  const friendRequestsEl = document.getElementById("friendRequests");
+  const friendsListEl = document.getElementById("friendsList");
+  const privateChatFriendEl = document.getElementById("privateChatFriend");
+  const privateChatMessagesEl = document.getElementById("privateChatMessages");
+  const questProgressText = document.getElementById("questProgressText");
+  const chatPanel = document.getElementById("chatPanel");
+  const chatStatus = document.createElement("p");
+  chatStatus.className = "chat-status";
+  chatStatus.id = "chatStatus";
+  document.querySelector(".chat-controls").prepend(chatStatus);
+  chatPanel.classList.add("enhanced");
+
+  function ref(path){ return db ? db.ref(path) : null; }
+  function now(){ return Date.now(); }
+  function normalizeUsername(v){ return (v||"").trim().toLowerCase(); }
+  function showToast(msg){ alert(msg); }
+  function setPanelVisible(id){
+    ["updatesPage","questPage","shopPage"].forEach(x=>{ const el=document.getElementById(x); if(el) el.style.display="none"; });
+    gamesGrid.style.display="none"; recommendedSection.style.display="none"; embedContainer.style.display="none";
+    const page = document.getElementById(id); if (page) page.style.display = "block";
+  }
+
+  window.showQuestPage = ()=>{ setPanelVisible("questPage"); updateQuestUI(); };
+  window.showShopPage = ()=>{ setPanelVisible("shopPage"); updateProfileUI(); };
+  window.openAdminPanel = ()=> adminModal.classList.add("show");
+
+  profileBtn.addEventListener("click", ()=> profileModal.classList.add("show"));
+
+  function containsBannedProfileWord(text){
+    const l = (text||"").toLowerCase();
+    return PROFILE_BANNED_WORDS.some(w => l.includes((w||"").toLowerCase()));
+  }
+
+  async function loadUserByEmail(email){
+    const snap = await ref("accounts").orderByChild("email").equalTo(email).once("value");
+    let result = null;
+    snap.forEach(ch => { result = { uid: ch.key, ...ch.val() }; });
+    return result;
+  }
+
+  async function refreshUserData(){
+    if (!currentUser || !db) return;
+    const snap = await ref(`accounts/${currentUser.uid}`).once("value");
+    if (!snap.exists()) return;
+    currentUser = { uid: currentUser.uid, ...snap.val() };
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    updateProfileUI();
+  }
+
+  window.registerAccount = async ()=>{
+    if (!db) return showToast("Databas saknas");
+    const email = document.getElementById("regEmail").value.trim().toLowerCase();
+    const username = document.getElementById("regUsername").value.trim();
+    const password = document.getElementById("regPassword").value;
+    if (!email || !username || !password) return showToast("Fyll i alla fält.");
+    if (containsBannedProfileWord(username)) return showToast("Username innehåller förbjudet ord.");
+    const unameKey = normalizeUsername(username);
+    const unameSnap = await ref(`usersByName/${unameKey}`).once("value");
+    if (unameSnap.exists()) return showToast("Username är upptaget.");
+    const emailExists = await loadUserByEmail(email);
+    if (emailExists) return showToast("Mail används redan.");
+    const accRef = ref("accounts").push();
+    const account = { email, username, password, coins: 0, verified: false, friends: {}, createdAt: now(), inventory: {} };
+    await accRef.set(account);
+    await ref(`usersByName/${unameKey}`).set(accRef.key);
+    showToast("Konto skapat! Nu kan du logga in.");
+  };
+
+  function generateSessionToken(){
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return `sess_${Date.now()}_${Math.random().toString(36).slice(2,10)}`;
+  }
+
+  async function activateSession(uid){
+    currentSessionToken = generateSessionToken();
+    localStorage.setItem("sessionToken", currentSessionToken);
+    await ref(`accounts/${uid}/sessionToken`).set(currentSessionToken);
+  }
+
+  function forceLogout(message){
+    currentUser = null;
+    currentSessionToken = null;
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("sessionToken");
+    updateProfileUI();
+    if (message) showToast(message);
+  }
+
+  window.startLogin = async ()=>{
+    if (!db) return;
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value;
+    const user = await loadUserByEmail(email);
+    if (!user || user.password !== password) return showToast("Fel mail eller lösenord.");
+    if (user.banned) return showToast("Du är bannad.");
+
+    currentUser = user;
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    chatNameEl.value = currentUser.username;
+    await activateSession(currentUser.uid);
+    await refreshUserData();
+    await updatePresenceUser();
+    watchSession();
+    profileModal.classList.remove("show");
+    showToast("Inloggad!");
+  };
+
+  async function updatePresenceUser(){
+    if (!db || !currentUser) return;
+    const tabId = sessionStorage.getItem("presenceTabId");
+    if (!tabId) return;
+    await ref(`presence/${tabId}/username`).set(currentUser.username);
+  }
+
+  function updateChatLock(){
+    const locked = !currentUser;
+    chatInputEl.disabled = locked;
+    chatSendEl.disabled = locked;
+    chatNameEl.disabled = true;
+    const left = Math.max(0, chatCooldownUntil - now());
+    if (locked) chatStatus.textContent = "Logga in via 👤 Profil för att chatta.";
+    else if (left > 0) chatStatus.textContent = `Cooldown: ${(left/1000).toFixed(1)}s`;
+    else chatStatus.textContent = `Inloggad som ${currentUser.username}${currentUser.verified ? ' ✔️' : ''}`;
+  }
+  setInterval(updateChatLock, 200);
+
+  async function checkModeration(){
+    if (!currentUser || !db) return { ok: false, reason: "Inte inloggad" };
+    const snap = await ref(`accounts/${currentUser.uid}`).once("value");
+    if (!snap.exists()) return { ok:false, reason:"Konto saknas" };
+    const u = snap.val();
+    if (u.banned) return { ok:false, reason:"Du är bannad" };
+    if (u.timeoutUntil && u.timeoutUntil > now()) return { ok:false, reason:`Timeout till ${new Date(u.timeoutUntil).toLocaleTimeString('sv-SE')}` };
+    return { ok:true, data:u };
+  }
+
+  async function sendChatMessageEnhanced(){
+    if (!chatRef) return;
+    if (!currentUser) return showToast("Du måste vara inloggad.");
+    if (now() < chatCooldownUntil) return;
+    const mod = await checkModeration();
+    if (!mod.ok) return showToast(mod.reason);
+    const text = sanitizeText(chatInputEl.value);
+    if (!text) return;
+    if (containsBannedWord(text)) return showToast("Ditt meddelande innehåller otillåtna ord.");
+    chatCooldownUntil = now() + CHAT_COOLDOWN_MS;
+    await chatRef.push({
+      uid: currentUser.uid,
+      name: currentUser.username,
+      verified: !!mod.data.verified,
+      text,
+      ts: now()
+    });
+    chatInputEl.value = "";
+  }
+
+  window.EnhancedApp = window.EnhancedApp || {};
+  window.EnhancedApp.sendChatMessage = sendChatMessageEnhanced;
+  window.EnhancedApp.onOpenGame = (game)=>{
+    if (String(game).toLowerCase().includes("snowrider") || String(game).toLowerCase().includes("summerrider3d")) {
+      clearInterval(snowQuestTimer);
+      snowQuestTimer = setInterval(()=>{
+        snowQuestMs += 1000;
+        localStorage.setItem("snowQuestMs", String(snowQuestMs));
+        updateQuestUI();
+      }, 1000);
+    } else {
+      clearInterval(snowQuestTimer);
+    }
+  };
+
+  const originalAddChatMessage = window.addChatMessage;
+  window.addChatMessage = function(msg){
+    const data = { ...msg };
+    if (data.verified) data.name = `${data.name} ✔️`;
+    originalAddChatMessage(data);
+  }
+
+  function updateQuestUI(){
+    const mins = Math.floor(snowQuestMs / 60000);
+    questProgressText.textContent = `Progress: ${Math.min(15, mins)} / 15 min`;
+    const btn = document.getElementById("claimQuestBtn");
+    if (snowQuestClaimed) { btn.disabled = true; btn.textContent = "Redan claimad"; return; }
+    btn.disabled = mins < 15;
+  }
+
+  window.claimSnowQuest = async ()=>{
+    if (!currentUser) return showToast("Logga in först.");
+    if (snowQuestClaimed) return;
+    if (snowQuestMs < 15 * 60000) return showToast("Quest ej klar ännu.");
+    const coinRef = ref(`accounts/${currentUser.uid}/coins`);
+    const snap = await coinRef.once("value");
+    const coins = Number(snap.val() || 0) + 10;
+    await coinRef.set(coins);
+    snowQuestClaimed = true;
+    localStorage.setItem("snowQuestClaimed", "1");
+    await refreshUserData();
+    updateQuestUI();
+    showToast("+10 coins!");
+  };
+
+  window.buyItem = async (item, price)=>{
+    if (!currentUser) return showToast("Logga in först.");
+    const accRef = ref(`accounts/${currentUser.uid}`);
+    const snap = await accRef.once("value");
+    const user = snap.val() || {};
+    const coins = Number(user.coins || 0);
+    if (coins < price) return showToast("Inte tillräckligt med coins.");
+    const inv = user.inventory || {};
+    inv[item] = true;
+    await accRef.update({ coins: coins - price, inventory: inv });
+    await refreshUserData();
+    document.getElementById("shopStatusText").textContent = `Köpte ${item}!`;
+  };
+
+  async function loadFriendsUI(){
+    if (!currentUser || !db) {
+      friendRequestsEl.innerHTML = "<small>Logga in för att se förfrågningar.</small>";
+      friendsListEl.innerHTML = "";
+      privateChatFriendEl.innerHTML = "";
+      return;
+    }
+    const reqSnap = await ref("friendRequests").orderByChild("to").equalTo(currentUser.uid).once("value");
+    friendRequestsEl.innerHTML = "";
+    reqSnap.forEach(ch=>{
+      const req = ch.val();
+      if (req.status !== "pending") return;
+      const row = document.createElement("div");
+      row.className = "quest-item";
+      row.innerHTML = `<span>${req.fromName}</span>`;
+      const btn = document.createElement("button"); btn.className = "mini-btn"; btn.textContent = "Acceptera";
+      btn.onclick = async ()=>{
+        await ref(`friendRequests/${ch.key}/status`).set("accepted");
+        await ref(`accounts/${currentUser.uid}/friends/${req.from}`).set(true);
+        await ref(`accounts/${req.from}/friends/${currentUser.uid}`).set(true);
+        loadFriendsUI();
+      };
+      row.appendChild(btn); friendRequestsEl.appendChild(row);
+    });
+
+    const fSnap = await ref(`accounts/${currentUser.uid}/friends`).once("value");
+    friendsListEl.innerHTML = "";
+    privateChatFriendEl.innerHTML = "";
+    const friendIds = Object.keys(fSnap.val() || {});
+    for (const fid of friendIds){
+      const uSnap = await ref(`accounts/${fid}`).once("value");
+      if (!uSnap.exists()) continue;
+      const uname = uSnap.val().username || "Okänd";
+      const chip = document.createElement("span"); chip.className = "chip"; chip.textContent = uname;
+      friendsListEl.appendChild(chip);
+      const opt = document.createElement("option"); opt.value=fid; opt.textContent=uname; privateChatFriendEl.appendChild(opt);
+    }
+    loadPrivateChat();
+  }
+
+  window.sendFriendRequest = async ()=>{
+    if (!currentUser) return showToast("Logga in först.");
+    const uname = document.getElementById("friendUsername").value.trim();
+    const unameKey = normalizeUsername(uname);
+    const snap = await ref(`usersByName/${unameKey}`).once("value");
+    if (!snap.exists()) return showToast("Användare hittades inte.");
+    const toUid = snap.val();
+    if (toUid === currentUser.uid) return showToast("Du kan inte adda dig själv.");
+    await ref("friendRequests").push({ from: currentUser.uid, fromName: currentUser.username, to: toUid, status: "pending", ts: now() });
+    showToast("Förfrågan skickad.");
+  };
+
+  function conversationKey(a,b){ return [a,b].sort().join("_"); }
+  function loadPrivateChat(){
+    if (privateChatUnsub) privateChatUnsub.off();
+    const fid = privateChatFriendEl.value;
+    if (!currentUser || !fid || !db) return;
+    const key = conversationKey(currentUser.uid, fid);
+    const cRef = ref(`privateChats/${key}`).limitToLast(40);
+    privateChatMessagesEl.innerHTML = "";
+    cRef.on("child_added", snap=>{
+      const m=snap.val()||{};
+      const d=document.createElement("div");
+      d.textContent = `${m.name}: ${m.text}`;
+      privateChatMessagesEl.appendChild(d);
+      privateChatMessagesEl.scrollTop = privateChatMessagesEl.scrollHeight;
+    });
+    privateChatUnsub = cRef;
+  }
+  privateChatFriendEl.addEventListener("change", loadPrivateChat);
+
+  window.sendPrivateMessage = async ()=>{
+    if (!currentUser) return showToast("Logga in först.");
+    const fid = privateChatFriendEl.value;
+    const text = sanitizeText(document.getElementById("privateMessageInput").value);
+    if (!fid || !text) return;
+    const key = conversationKey(currentUser.uid, fid);
+    await ref(`privateChats/${key}`).push({ from: currentUser.uid, name: currentUser.username, text, ts: now() });
+    document.getElementById("privateMessageInput").value = "";
+  };
+
+  window.adminLogin = ()=>{
+    const pass = document.getElementById("adminPassword").value;
+    if (pass !== ADMIN_PASSWORD) return showToast("Fel admin lösenord.");
+    isAdmin = true;
+    document.getElementById("adminControls").style.display = "block";
+  };
+
+  window.adminAction = async (action)=>{
+    if (!isAdmin || !db) return;
+    const uname = document.getElementById("adminTargetUser").value.trim();
+    const key = normalizeUsername(uname);
+    const snap = await ref(`usersByName/${key}`).once("value");
+    if (!snap.exists()) return showToast("User hittades inte.");
+    const uid = snap.val();
+    if (action === "kick") await ref(`accounts/${uid}/kickAt`).set(now());
+    if (action === "ban") await ref(`accounts/${uid}/banned`).set(true);
+    if (action === "timeout") {
+      const mins = Number(document.getElementById("adminTimeoutMinutes").value || 1);
+      await ref(`accounts/${uid}/timeoutUntil`).set(now() + mins*60000);
+    }
+    if (action === "coins") {
+      const give = Number(document.getElementById("adminCoins").value || 0);
+      const cRef = ref(`accounts/${uid}/coins`); const cSnap = await cRef.once("value");
+      await cRef.set(Number(cSnap.val()||0)+give);
+    }
+    if (action === "verify") await ref(`accounts/${uid}/verified`).set(true);
+    document.getElementById("adminStatus").textContent = `Action ${action} körd på ${uname}.`;
+  };
+
+  function watchKick(){
+    if (!currentUser || !db) return;
+    ref(`accounts/${currentUser.uid}/kickAt`).on("value", snap=>{
+      const v = Number(snap.val()||0);
+      if (v > 0) {
+        forceLogout("Du blev kickad av admin.");
+      }
+    });
+  }
+
+  function watchSession(){
+    if (!currentUser || !db) return;
+    ref(`accounts/${currentUser.uid}/sessionToken`).on("value", snap=>{
+      const token = snap.val();
+      if (!token || !currentSessionToken) return;
+      if (token !== currentSessionToken) {
+        forceLogout("Du loggades ut eftersom kontot loggade in på en annan enhet.");
+      }
+    });
+  }
+
+  function updateProfileUI(){
+    const name = currentUser ? `${currentUser.username}${currentUser.verified ? ' ✔️' : ''}` : "Inte inloggad";
+    const coins = currentUser ? Number(currentUser.coins || 0) : 0;
+    profileStateText.textContent = `Status: ${name} | 🪙 ${coins} coins`;
+    const shopCoinsEl = document.getElementById("shopCoins");
+    if (shopCoinsEl) shopCoinsEl.textContent = `Coins: ${coins}`;
+    updateChatLock();
+    loadFriendsUI();
+  }
+
+  const oldInit = window.firebase && firebase.apps && firebase.apps.length;
+  const waitDb = setInterval(()=>{
+    if (window.firebase && firebase.apps && firebase.apps.length) {
+      db = firebase.database();
+      clearInterval(waitDb);
+      updateQuestUI();
+      refreshUserData().then(updateProfileUI);
+      if (currentUser) chatNameEl.value = currentUser.username;
+      watchKick();
+      watchSession();
+    }
+  },200);
+
+})();
+</script>
+
 </body>
 </html>
-
 
 
 
